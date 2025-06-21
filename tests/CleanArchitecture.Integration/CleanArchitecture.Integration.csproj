@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CleanArchitecture.API\CleanArchitecture.API.csproj" />
+  </ItemGroup>
+
 </Project>
