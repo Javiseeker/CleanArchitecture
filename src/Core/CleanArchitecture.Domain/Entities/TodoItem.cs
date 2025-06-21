@@ -1,5 +1,8 @@
-﻿using CleanArchitecture.Domain.Common;
+﻿// src/Core/CleanArchitecture.Domain/Entities/TodoItem.cs
+
+using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Domain.Enums;
+using CleanArchitecture.Domain.Exceptions;
 
 namespace CleanArchitecture.Domain.Entities;
 
@@ -24,16 +27,34 @@ public class TodoItem : BaseEntity<int>
 
     public static TodoItem Create(string title, string? description = null, Priority priority = Priority.Medium, DateTime? dueDate = null)
     {
+        // ===== DOMAIN BUSINESS RULES =====
+        // These are core business rules that should ALWAYS be enforced
+
         if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("Todo item title cannot be empty", nameof(title));
+            throw new DomainException("Todo item must have a title");
+
+        // Business rule: Due date cannot be in the past
+        if (dueDate.HasValue && dueDate.Value.Date < DateTime.Today)
+            throw new DomainException("Due date cannot be in the past");
+
+        // Business rule: Critical priority items cannot have due dates more than 30 days out
+        if (priority == Priority.Critical && dueDate.HasValue && dueDate.Value > DateTime.Today.AddDays(30))
+            throw new DomainException("Critical priority items cannot have due dates more than 30 days out");
 
         return new TodoItem(title, description, priority, dueDate);
     }
 
     public void Update(string title, string? description, Priority priority, DateTime? dueDate)
     {
+        // Same business rules apply to updates
         if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("Todo item title cannot be empty", nameof(title));
+            throw new DomainException("Todo item must have a title");
+
+        if (dueDate.HasValue && dueDate.Value.Date < DateTime.Today)
+            throw new DomainException("Due date cannot be in the past");
+
+        if (priority == Priority.Critical && dueDate.HasValue && dueDate.Value > DateTime.Today.AddDays(30))
+            throw new DomainException("Critical priority items cannot have due dates more than 30 days out");
 
         Title = title;
         Description = description;
@@ -44,12 +65,18 @@ public class TodoItem : BaseEntity<int>
 
     public void Complete()
     {
+        if (IsCompleted)
+            throw new DomainException("Todo item is already completed");
+
         IsCompleted = true;
         SetUpdatedAt();
     }
 
     public void Reopen()
     {
+        if (!IsCompleted)
+            throw new DomainException("Todo item is not completed");
+
         IsCompleted = false;
         SetUpdatedAt();
     }
