@@ -1,8 +1,8 @@
 ﻿using CleanArchitecture.Domain.Enums;
 
-namespace CleanArchitecture.Application.DTOs;
+namespace CleanArchitecture.API.DTOs;
 
-public class TodoItemDto
+public class TodoItemResponse
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;

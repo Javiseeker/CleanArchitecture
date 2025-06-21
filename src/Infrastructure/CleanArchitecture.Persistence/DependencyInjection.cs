@@ -15,9 +15,7 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
-
         services.AddScoped<ITodoItemRepository, TodoItemRepository>();
-        services.AddScoped<ITodoListRepository, TodoListRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // TODO: Database Health Checks

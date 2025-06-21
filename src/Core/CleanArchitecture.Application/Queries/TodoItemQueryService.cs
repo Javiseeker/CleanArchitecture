@@ -1,11 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Domain.Repositories;
 
 namespace CleanArchitecture.Application.Queries;
 
-internal class TodoItemQueryService : ITodoItemQueryService
+public class TodoItemQueryService : ITodoItemQueryService
 {
+    private readonly ITodoItemRepository _repository;
+
+    public TodoItemQueryService(ITodoItemRepository repository)
+    {
+        _repository = repository;
+    }
+
+    public async Task<TodoItem?> GetTodoItemByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _repository.GetByIdAsync(id, cancellationToken);
+    }
+
+    public async Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _repository.GetAllAsync(cancellationToken);
+    }
 }

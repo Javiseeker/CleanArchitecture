@@ -13,13 +13,6 @@ public class TodoItemRepository : ITodoItemRepository
         _context = context;
     }
 
-    public async Task<TodoItem> AddAsync(TodoItem todoItem, CancellationToken cancellationToken = default)
-    {
-        _context.Add(todoItem);
-        await _context.SaveChangesAsync(cancellationToken);
-        return todoItem;
-    }
-
     public Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         var todoItem = _context.TodoItems.FirstOrDefault(x => x.Id == id);
@@ -32,10 +25,11 @@ public class TodoItemRepository : ITodoItemRepository
         return Task.FromResult(todoItems);
     }
 
-    public Task<IEnumerable<TodoItem>> GetByTodoListIdAsync(int todoListId, CancellationToken cancellationToken = default)
+    public async Task<TodoItem> AddAsync(TodoItem todoItem, CancellationToken cancellationToken = default)
     {
-        var todoItems = _context.TodoItems.Where(x => x.TodoListId == todoListId);
-        return Task.FromResult(todoItems.AsEnumerable());
+        _context.Add(todoItem);
+        await _context.SaveChangesAsync(cancellationToken);
+        return todoItem;
     }
 
     public async Task UpdateAsync(TodoItem todoItem, CancellationToken cancellationToken = default)
@@ -44,9 +38,13 @@ public class TodoItemRepository : ITodoItemRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(TodoItem todoItem, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        _context.Remove(todoItem);
-        await _context.SaveChangesAsync(cancellationToken);
+        var todoItem = await GetByIdAsync(id, cancellationToken);
+        if (todoItem != null)
+        {
+            _context.Remove(todoItem);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

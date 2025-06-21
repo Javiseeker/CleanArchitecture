@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.Queries;
 
-internal interface ITodoItemQueryService
+public interface ITodoItemQueryService
 {
+    Task<TodoItem?> GetTodoItemByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync(CancellationToken cancellationToken = default);
 }
