@@ -1,6 +1,5 @@
 ﻿using CleanArchitecture.API.DTOs;
 using CleanArchitecture.Application.Commands;
-using CleanArchitecture.Application.DTOs;
 using CleanArchitecture.Application.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,10 +19,10 @@ public class TodoItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TodoItemDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<TodoItemResponse>>> GetAll()
     {
         var todoItems = await _queryService.GetAllTodoItemsAsync();
-        var dtos = todoItems.Select(item => new TodoItemDto
+        var dtos = todoItems.Select(item => new TodoItemResponse
         {
             Id = item.Id,
             Title = item.Title,
@@ -39,13 +38,13 @@ public class TodoItemsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TodoItemDto>> GetById(int id)
+    public async Task<ActionResult<TodoItemResponse>> GetById(int id)
     {
         var todoItem = await _queryService.GetTodoItemByIdAsync(id);
         if (todoItem == null)
             return NotFound();
 
-        var dto = new TodoItemDto
+        var dto = new TodoItemResponse
         {
             Id = todoItem.Id,
             Title = todoItem.Title,
@@ -61,7 +60,7 @@ public class TodoItemsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<TodoItemDto>> Create([FromBody] CreateTodoItemRequest request)
+    public async Task<ActionResult<TodoItemResponse>> Create([FromBody] TodoItemCreateRequest request)
     {
         var todoItem = await _commandService.CreateTodoItemAsync(
             request.Title,
@@ -69,7 +68,7 @@ public class TodoItemsController : ControllerBase
             request.Priority,
             request.DueDate);
 
-        var dto = new TodoItemDto
+        var dto = new TodoItemResponse
         {
             Id = todoItem.Id,
             Title = todoItem.Title,
