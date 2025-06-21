@@ -3,9 +3,9 @@ using CleanArchitecture.Infrastructure;
 using CleanArchitecture.Persistence;
 using Scalar.AspNetCore;
 
-namespace CleanArchitecture;
+namespace CleanArchitecture.API;
 
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -15,6 +15,7 @@ public static class Program
         ConfigureServices(builder.Services, builder.Configuration);
 
         var app = builder.Build();
+        // TODO: need to add middleware for exception handling, there is an integration test not working atm.
 
         // Configure the HTTP request pipeline
         ConfigurePipeline(app);
@@ -22,7 +23,7 @@ public static class Program
         app.Run();
     }
 
-    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         // ===== LAYER REGISTRATIONS =====
         // Order matters for dependency resolution
@@ -63,7 +64,7 @@ public static class Program
         // services.AddHealthChecks();
     }
 
-    private static void ConfigurePipeline(WebApplication app)
+    public static void ConfigurePipeline(WebApplication app)
     {
         // Development-specific middleware
         if (app.Environment.IsDevelopment())

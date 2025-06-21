@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Infrastructure\CleanArchitecture.Persistence\CleanArchitecture.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="CleanArchitecture.Integration" />
+  </ItemGroup>
+  
 </Project>
