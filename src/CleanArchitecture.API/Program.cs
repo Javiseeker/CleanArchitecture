@@ -1,3 +1,4 @@
+using CleanArchitecture.API.Middleware;
 using CleanArchitecture.Application;
 using CleanArchitecture.Infrastructure;
 using CleanArchitecture.Persistence;
@@ -66,7 +67,8 @@ public class Program
 
     public static void ConfigurePipeline(WebApplication app)
     {
-        // Development-specific middleware
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
