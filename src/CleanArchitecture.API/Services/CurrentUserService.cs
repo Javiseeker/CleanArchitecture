@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace CleanArchitecture.Infrastructure.Services;
+namespace CleanArchitecture.API.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

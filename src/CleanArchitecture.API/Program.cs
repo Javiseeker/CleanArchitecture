@@ -1,5 +1,7 @@
 using CleanArchitecture.API.Middleware;
+using CleanArchitecture.API.Services;
 using CleanArchitecture.Application;
+using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Infrastructure;
 using CleanArchitecture.Persistence;
 using Scalar.AspNetCore;
@@ -39,6 +41,11 @@ public class Program
         services.AddPersistenceServices(configuration);
 
         // ===== API LAYER SERVICES =====
+        // HTTP Context for web-specific services
+        services.AddHttpContextAccessor();
+
+        // Web-specific services (presentation layer concerns)
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         // Controllers
         services.AddControllers();

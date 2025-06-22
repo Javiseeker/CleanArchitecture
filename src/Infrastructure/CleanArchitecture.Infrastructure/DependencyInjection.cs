@@ -13,6 +13,7 @@ public static class DependencyInjection
     {
         // TODO: External Services (implement these later)
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
